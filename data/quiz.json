@@ -33,6 +33,41 @@
       "image": "chile_outline.png",
       "choices": ["Chile", "Uruguay", "Guyana", "Paraguay"],
       "answer": "Chile"
+    },
+    {
+      "id": 6,
+      "prompt": "This Andean country is home to Machu Picchu. Which country is it?",
+      "image": "peru_outline.png",
+      "choices": ["Ecuador", "Bolivia", "Peru", "Colombia"],
+      "answer": "Peru"
+    },
+    {
+      "id": 7,
+      "prompt": "Which oil-rich country is located on the northern coast of South America?",
+      "image": "venezuela_outline.png",
+      "choices": ["Venezuela", "Guyana", "Suriname", "Ecuador"],
+      "answer": "Venezuela"
+    },
+    {
+      "id": 8,
+      "prompt": "This landlocked country shares borders with Brazil, Argentina, and Bolivia. Identify it.",
+      "image": "paraguay_outline.png",
+      "choices": ["Uruguay", "Paraguay", "Suriname", "Guyana"],
+      "answer": "Paraguay"
+    },
+    {
+      "id": 9,
+      "prompt": "Which small country is located between Brazil and Argentina?",
+      "image": "uruguay_outline.png",
+      "choices": ["Guyana", "Paraguay", "Uruguay", "Ecuador"],
+      "answer": "Uruguay"
+    },
+    {
+      "id": 10,
+      "prompt": "This country is named after the equator that runs through it. Which is it?",
+      "image": "ecuador_outline.png",
+      "choices": ["Colombia", "Ecuador", "Bolivia", "Peru"],
+      "answer": "Ecuador"
     }
   ]
   
