@@ -1,44 +1,55 @@
 {% extends "base.html" %}
 {% block title %}Lesson {{ data.id }}{% endblock %}
+
 {% block content %}
-  <h2>{{ data.title }}</h2>
-  
-  {% if ":" in data.body and ";" in data.body and (data.id == 4 or data.id == 5) %}
-    <!-- Handle neighboring countries format -->
-    <ul class="mb-3">
-      {% for country_block in data.body.split(";") %}
-        {% if country_block.strip() %}
-          {% set parts = country_block.split(":") %}
-          {% if parts|length > 1 %}
-            <li>
-              <strong>{{ parts[0].strip() }}</strong>: {{ parts[1].strip() }}
-            </li>
+  <div class="container py-4">
+    <div class="row">
+      <!-- Left column: Text Content -->
+      <div class="col-md-7">
+        <h2 class="mb-4">{{ data.title }}</h2>
+
+        {% if ":" in data.body and ";" in data.body and (data.id == 4 or data.id == 5) %}
+          <ul class="list-group mb-4">
+            {% for country_block in data.body.split(";") %}
+              {% if country_block.strip() %}
+                {% set parts = country_block.split(":") %}
+                {% if parts|length > 1 %}
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <strong>{{ parts[0].strip() }}</strong>
+                    <span>{{ parts[1].strip() }}</span>
+                  </li>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          </ul>
+        {% elif ";" in data.body %}
+          <ul class="list-group mb-4">
+            {% for item in data.body.split(";") %}
+              {% if item.strip() %}
+                <li class="list-group-item">{{ item.strip() }}</li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="lead">{{ data.body }}</p>
+        {% endif %}
+
+        <form method="post" class="d-flex gap-2">
+          <button type="submit" class="btn btn-primary">
+            {% if last %}Restart Lessons{% else %}Next{% endif %}
+          </button>
+          {% if last %}
+            <a class="btn btn-primary" href="{{ url_for('quiz', qid=1) }}">Start Quiz</a>
           {% endif %}
-        {% endif %}
-      {% endfor %}
-    </ul>
-  {% elif ";" in data.body %}
-    <!-- Handle semicolon-separated lists -->
-    <ul class="mb-3">
-      {% for item in data.body.split(";") %}
-        {% if item.strip() %}
-          <li>{{ item.strip() }}</li>
-        {% endif %}
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>{{ data.body }}</p>
-  {% endif %}
-  
-  {% if data.image %}
-    <img src="{{ url_for('static', filename=data.image) }}" class="img-fluid my-3 app-image">
-  {% endif %}
-  <form method="post">
-    <button class="btn btn-secondary">
-      {% if last %}Restart Lessons{% else %}Next{% endif %}
-    </button>
-  </form>
-  {% if last %}
-    <a class="btn btn-primary mt-3" href="{{ url_for('quiz', qid=1) }}">Start Quiz</a>
-  {% endif %}
+        </form>
+      </div>
+
+      <!-- Right column: Image -->
+      {% if data.image %}
+        <div class="col-md-5 text-center">
+          <img src="{{ url_for('static', filename=data.image) }}" class="img-fluid rounded shadow-sm mb-4 app-image" alt="Lesson image">
+        </div>
+      {% endif %}
+    </div>
+  </div>
 {% endblock %}
