@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Quiz {{ qnum }}/{{ total }}{% endblock %}
+{% block content %}
+  <h2>Quiz {{ qnum }} of {{ total }}</h2>
+  <p>{{ data.prompt }}</p>
+  <img src="{{ url_for('static', filename=data.image) }}" class="img-fluid my-3 app-image" alt="outline">
+  <form method="post">
+    {% for opt in data.choices %}
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="choice" id="c{{ loop.index }}" value="{{ opt }}" required>
+        <label class="form-check-label" for="c{{ loop.index }}">{{ opt }}</label>
+      </div>
+    {% endfor %}
+    <button class="btn btn-primary mt-3">Submit</button>
+  </form>
+{% endblock %}

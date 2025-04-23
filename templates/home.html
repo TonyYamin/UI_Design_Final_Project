@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Country Shapes 101{% endblock %}
+{% block content %}
+  <h1 class="mb-3">Country Shapes 101</h1>
+  <p>Learn to identify South- and Central-American countries by their silhouettes, then test yourself.</p>
+  <form action="{{ url_for('learn', lid=1) }}" method="post">
+    <button class="btn btn-primary">Start Lesson</button>
+  </form>
+{% endblock %}

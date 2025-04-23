@@ -1,0 +1,69 @@
+[
+    {
+        "id": 1,
+        "title": "Welcome to Country Shapes 101",
+        "body": "We'll learn to recognise South & Central-American countries from their outlines.",
+        "image": "images/main_page.jpg"
+    },
+    {
+        "id": 2,
+        "title": "South America overview",
+        "body": "Argentina; Bolivia; Brazil; Chile; Colombia; Ecuador; Guyana; Paraguay; Peru; Suriname; Uruguay; Venezuela",
+        "image": "images/south.jpg"
+    },
+    {
+        "id": 3,
+        "title": "Central America overview",
+        "body": "Belize; Costa Rica; El Salvador; Guatemala; Honduras; Nicaragua; Panama",
+        "image": "images/central.png"
+    },
+    {
+        "id": 4,
+        "title": "Neighbouring countries – South America",
+        "body": "Argentina: Chile, Bolivia, Paraguay, Brazil, Uruguay; Bolivia: Peru, Brazil, Paraguay, Argentina, Chile; Brazil: Uruguay, Argentina, Paraguay, Bolivia, Peru, Colombia, Venezuela, Guyana, Suriname; Chile: Peru, Bolivia, Argentina; Colombia: Venezuela, Brazil, Peru, Ecuador, Panama; Ecuador: Colombia, Peru; Guyana: Venezuela, Brazil, Suriname; Paraguay: Bolivia, Brazil, Argentina; Peru: Ecuador, Colombia, Brazil, Bolivia, Chile; Suriname: Guyana, Brazil; Uruguay: Brazil, Argentina; Venezuela: Colombia, Brazil, Guyana;",
+        "image": "images/south.jpg"
+    },
+    {
+        "id": 5,
+        "title": "Neighbouring countries – Central America",
+        "body": "Belize: Mexico, Guatemala; Costa Rica: Nicaragua, Panama; El Salvador: Guatemala, Honduras; Guatemala: Mexico, Belize, Honduras, El Salvador; Honduras: Guatemala, El Salvador, Nicaragua; Nicaragua: Honduras, Costa Rica; Panama: Costa Rica, Colombia",
+        "image": "images/central.png"
+    },
+    {
+        "id": 6,
+        "title": "In-depth: Brazil",
+        "body": "The largest country in South America by area; Roughly circular shape, bulging eastward; Borders nearly every South American country (except Chile & Ecuador); Home to the Amazon Rainforest.",
+        "image": "images/brasil.png"
+    },
+    {
+        "id": 7,
+        "title": "In-depth: Chile",
+        "body": "Extremely long and narrow – stretches along the Pacific coast; Shares the Andes Mountains border with Argentina; Touches Peru to the north and Antarctica to the south.",
+        "image": "images/chile.png"
+    },
+    {
+        "id": 8,
+        "title": "In-depth: Colombia",
+        "body": "Northwestern location near Central America; Touches both the Caribbean Sea and Pacific Ocean; Borders Venezuela, Brazil, Peru, Ecuador, and Panama.",
+        "image": "images/colombia.png"
+    },
+    {
+        "id": 9,
+        "title": "In-depth: Peru",
+        "body": "Western coast country just south of Ecuador and Colombia; Shares Amazon Basin with Brazil; Borders the Pacific Ocean and Andes mountains.",
+        "image": "images/peru.png"
+    },
+    {
+        "id": 10,
+        "title": "In-depth: Bolivia",
+        "body": "Landlocked country; Located roughly in the center of South America; Borders Peru, Brazil, Paraguay, Argentina, Chile.",
+        "image": "images/bolivia.png"
+    },
+    {
+        "id": 11,
+        "title": "In-depth: Venezuela",
+        "body": "Northern coast along the Caribbean Sea; Eastern neighbor to Colombia; Western neighbor to Guyana; Often shaped like a triangle or \"chopped square.\"",
+        "image": "images/venezuela.png"
+    }
+  ]
+  

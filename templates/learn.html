@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Lesson {{ data.id }}{% endblock %}
+{% block content %}
+  <h2>{{ data.title }}</h2>
+  
+  {% if ":" in data.body and ";" in data.body and (data.id == 4 or data.id == 5) %}
+    <!-- Handle neighboring countries format -->
+    <ul class="mb-3">
+      {% for country_block in data.body.split(";") %}
+        {% if country_block.strip() %}
+          {% set parts = country_block.split(":") %}
+          {% if parts|length > 1 %}
+            <li>
+              <strong>{{ parts[0].strip() }}</strong>: {{ parts[1].strip() }}
+            </li>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    </ul>
+  {% elif ";" in data.body %}
+    <!-- Handle semicolon-separated lists -->
+    <ul class="mb-3">
+      {% for item in data.body.split(";") %}
+        {% if item.strip() %}
+          <li>{{ item.strip() }}</li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>{{ data.body }}</p>
+  {% endif %}
+  
+  {% if data.image %}
+    <img src="{{ url_for('static', filename=data.image) }}" class="img-fluid my-3 app-image">
+  {% endif %}
+  <form method="post">
+    <button class="btn btn-secondary">
+      {% if last %}Restart Lessons{% else %}Next{% endif %}
+    </button>
+  </form>
+  {% if last %}
+    <a class="btn btn-primary mt-3" href="{{ url_for('quiz', qid=1) }}">Start Quiz</a>
+  {% endif %}
+{% endblock %}

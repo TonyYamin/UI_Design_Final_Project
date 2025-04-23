@@ -1,0 +1,38 @@
+[
+    {
+      "id": 1,
+      "prompt": "Which country is shown in this outline?",
+      "image": "brazil_outline.png",
+      "choices": ["Argentina", "Brazil", "Colombia", "Peru"],
+      "answer": "Brazil"
+    },
+    {
+      "id": 2,
+      "prompt": "This country reaches the far southern tip of the continent.",
+      "image": "argentina_outline.png",
+      "choices": ["Uruguay", "Brazil", "Argentina", "Paraguay"],
+      "answer": "Argentina"
+    },
+    {
+      "id": 3,
+      "prompt": "Identify the country assembled from these fragments.",
+      "image": "colombia_puzzle.png",
+      "choices": ["Venezuela", "Colombia", "Ecuador", "Suriname"],
+      "answer": "Colombia"
+    },
+    {
+      "id": 4,
+      "prompt": "You just crossed from Panama into this coffee-famous nation. Where are you?",
+      "image": "northwest_sa.png",
+      "choices": ["Bolivia", "Colombia", "Argentina", "Paraguay"],
+      "answer": "Colombia"
+    },
+    {
+      "id": 5,
+      "prompt": "Drag-label question (outline shown). Which country is the long ribbon?",
+      "image": "chile_outline.png",
+      "choices": ["Chile", "Uruguay", "Guyana", "Paraguay"],
+      "answer": "Chile"
+    }
+  ]
+  
