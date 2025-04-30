@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Quiz Introduction{% endblock %}
+{% block content %}
+  <div class="container py-4">
+    <div class="row">
+      <div class="col-md-8 mx-auto text-center">
+        <h1 class="display-4 mb-4">Welcome to the Quiz!</h1>
+        <p class="lead mb-4">Test your knowledge of South and Central American countries with our interactive quiz.</p>
+        
+        <div class="card mb-4 shadow-sm" style="background-color: #f8f9fa; border: none">
+          <div class="card-body p-4">
+            <h2 class="h4 mb-4">What to Expect:</h2>
+            <ul class="list-unstyled">
+              <li class="mb-3">10 multiple-choice questions</li>
+              <li class="mb-3">Country outlines and geographical features</li>
+              <li class="mb-3">Immediate feedback on your answers</li>
+              <li class="mb-3">Final score at the end</li>
+            </ul>
+          </div>
+        </div>
+
+        <a href="{{ url_for('quiz', qid=1) }}" class="btn btn-primary btn-lg">Start Quiz</a>
+      </div>
+    </div>
+  </div>
+{% endblock %} 

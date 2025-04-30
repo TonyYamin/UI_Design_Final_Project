@@ -1,9 +1,62 @@
 {% extends "base.html" %}
 {% block title %}Country Shapes 101{% endblock %}
 {% block content %}
-  <h1 class="mb-3">Country Shapes 101</h1>
-  <p>Learn to identify South- and Central-American countries by their silhouettes, then test yourself.</p>
-  <form action="{{ url_for('learn', lid=1) }}" method="post">
-    <button class="btn btn-primary">Start Lesson</button>
-  </form>
+<div class="container py-5">
+  <!-- Header Section -->
+  <div class="text-center mb-5">
+    <h1 class="display-4 mb-3">Country Shapes 101</h1>
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <p class="lead">Learn to differentiate South American countries from Central American countries by their shapes and locations</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cards Section -->
+  <div class="row justify-content-center g-4">
+    <!-- Explore Card -->
+    <div class="col-md-5">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body text-center p-4">
+          <img src="{{ url_for('static', filename='images/south.jpg') }}" class="img-fluid rounded mb-3" alt="Map preview" style="max-height: 200px; object-fit: cover;">
+          <form action="{{ url_for('learn', lid=1) }}" method="get">
+            <button class="btn btn-primary btn-lg w-100">Start Learning</button>
+          </form>
+          <p class="card-text mt-4">Explore the unique shapes and locations of countries in South and Central America.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quiz Card -->
+    <div class="col-md-5">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body text-center p-4">
+          <div class="mb-3" style="height: 200px; display: flex; align-items: center; justify-content: center;">
+            <svg class="bi bi-clipboard-check" width="100" height="100" fill="currentColor" viewBox="0 0 16 16">
+              <path fill-rule="evenodd" d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+              <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+              <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+            </svg>
+          </div>
+          <a href="{{ url_for('quiz_intro') }}" class="btn btn-primary btn-lg w-100">Test yourself</a>
+          <p class="card-text mt-4">Challenge yourself to identify countries based on their shapes and locations.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .card {
+    transition: transform 0.2s;
+    border: none;
+    background-color: #f8f9fa;
+  }
+  .card:hover {
+    transform: translateY(-5px);
+  }
+  .btn-lg {
+    padding: 0.75rem 1.5rem;
+  }
+</style>
 {% endblock %}

@@ -4,17 +4,112 @@
     <meta charset="utf-8">
     <title>{% block title %}{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
+      :root {
+        --font-family-headers: 'Source Sans Pro', sans-serif;
+        --font-family-body: 'Inter', sans-serif;
+      }
+      
+      body {
+        font-family: var(--font-family-body);
+        line-height: 1.6;
+      }
+
+      h1, h2, h3, h4, h5, h6, .navbar-brand {
+        font-family: var(--font-family-headers);
+        font-weight: 600;
+        letter-spacing: -0.02em;
+      }
+
+      .display-4 {
+        font-weight: 700;
+        letter-spacing: -0.03em;
+      }
+
+      .nav-link {
+        font-family: var(--font-family-headers);
+        font-weight: 500;
+        letter-spacing: 0.01em;
+      }
+
       .app-image {
         max-width: 500px;
         max-height: 400px;
         object-fit: contain;
       }
+
+      .navbar {
+        margin-bottom: 2rem;
+        background-color: #888a8d;
+      }
+
+      .navbar-brand, .nav-link {
+        color: rgba(255,255,255,0.9) !important;
+      }
+
+      .nav-link:hover {
+        color: white !important;
+      }
+
+      .navbar-toggler {
+        border-color: rgba(255, 255, 255, 0.188);
+      }
+
+      .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.7%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+      }
+
+      .btn {
+        font-family: var(--font-family-headers);
+        font-weight: 600;
+        letter-spacing: 0.02em;
+      }
+
+      .card {
+        border-radius: 8px;
+      }
+
+      .lead {
+        font-family: var(--font-family-body);
+        font-weight: 400;
+        letter-spacing: -0.01em;
+      }
     </style>
   </head>
   <body class="container py-4">
+    <nav class="navbar navbar-expand-lg">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="{{ url_for('home') }}">Country Shapes 101</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('learn', lid=2) }}">South America Overview</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('learn', lid=3) }}">Central America Overview</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('quiz_intro') }}">Quiz</a>
+            </li>
+          </ul>
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="https://www.google.com/maps/@4.6634163,-74.0717067,4z" target="_blank">
+                <i> Keep exploring yourself! </i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
     {% block content %}{% endblock %}
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ url_for('static', filename='main.js') }}"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   </body>
 </html>

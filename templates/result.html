@@ -1,7 +1,13 @@
 {% extends "base.html" %}
 {% block title %}Results{% endblock %}
 {% block content %}
-  <h2>Quiz complete!</h2>
-  <p class="lead">You scored <strong>{{ score }}/{{ total }}</strong>.</p>
-  <a class="btn btn-secondary" href="{{ url_for('home') }}">Play again</a>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 text-center">
+      <h1 class="display-4 mb-4">Quiz Complete!</h1>
+      <p class="display-6 mb-5">You scored <strong>{{ score }}/{{ total }}</strong></p>
+      <a class="btn btn-primary btn-lg" href="{{ url_for('home') }}">Try Again</a>
+    </div>
+  </div>
+</div>
 {% endblock %}

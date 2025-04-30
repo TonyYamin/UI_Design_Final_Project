@@ -35,11 +35,14 @@
         {% endif %}
 
         <form method="post" class="d-flex gap-2">
+          {% if data.id > 1 %}
+            <a href="{{ url_for('learn', lid=data.id-1) }}" class="btn btn-secondary">Back</a>
+          {% endif %}
           <button type="submit" class="btn btn-primary">
             {% if last %}Restart Lessons{% else %}Next{% endif %}
           </button>
           {% if last %}
-            <a class="btn btn-primary" href="{{ url_for('quiz', qid=1) }}">Start Quiz</a>
+            <a class="btn btn-primary" href="{{ url_for('quiz_intro') }}">Start Quiz</a>
           {% endif %}
         </form>
       </div>
