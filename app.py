@@ -34,6 +34,10 @@ def learn(lid: int):
     return render_template("learn.html", data=page, last=(lid == len(LESSONS)))
 
 # ---------------- quiz screens -------------------
+@app.route("/quiz_intro")
+def quiz_intro():
+    return render_template("quiz_intro.html")
+
 @app.route("/quiz/<int:qid>", methods=["GET", "POST"])
 def quiz(qid: int):
     if request.method == "POST":
