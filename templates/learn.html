@@ -5,46 +5,77 @@
   <div class="container py-4">
     <div class="row">
       <!-- Left column: Text Content -->
-      <div class="col-md-7">
-        <h2 class="mb-4">{{ data.title }}</h2>
-
-        {% if ":" in data.body and ";" in data.body and (data.id == 4 or data.id == 5) %}
-          <ul class="list-group mb-4">
-            {% for country_block in data.body.split(";") %}
-              {% if country_block.strip() %}
-                {% set parts = country_block.split(":") %}
-                {% if parts|length > 1 %}
-                  <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <strong>{{ parts[0].strip() }}</strong>
-                    <span>{{ parts[1].strip() }}</span>
-                  </li>
-                {% endif %}
-              {% endif %}
-            {% endfor %}
-          </ul>
-        {% elif ";" in data.body %}
-          <ul class="list-group mb-4">
-            {% for item in data.body.split(";") %}
-              {% if item.strip() %}
-                <li class="list-group-item">{{ item.strip() }}</li>
-              {% endif %}
-            {% endfor %}
-          </ul>
-        {% else %}
-          <p class="lead">{{ data.body }}</p>
+      <div class="col-md-7 d-flex flex-column">
+        <h2 class="mb-3">{{ data.title }}</h2>
+        
+        <!-- Progress Bar (hidden for introduction) -->
+        {% if not is_intro %}
+        <div class="mb-3 p-2 bg-light rounded-3 shadow-sm">
+          <div class="d-flex justify-content-between align-items-center mb-1 px-2">
+            <span class="badge bg-success rounded-pill">{{ position }}</span>
+            <span class="badge bg-secondary rounded-pill">{{ total }}</span>
+          </div>
+          <div class="progress" style="height: 8px;">
+            <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar" 
+                 style="width: {{ progress_percent }}%;" 
+                 aria-valuenow="{{ position }}" aria-valuemin="0" aria-valuemax="{{ total }}"></div>
+          </div>
+        </div>
         {% endif %}
 
-        <form method="post" class="d-flex gap-2">
+        <!-- Navigation buttons - right under progress bar -->
+        <div class="d-flex justify-content-between mb-4">
           {% if data.id > 1 %}
-            <a href="{{ url_for('learn', lid=data.id-1) }}" class="btn btn-secondary">Back</a>
+            <a href="{{ url_for('learn', lid=data.id-1) }}" class="btn btn-secondary">
+              <i class="bi bi-arrow-left"></i> Back
+            </a>
+          {% else %}
+            <div></div> <!-- Empty div to maintain flex spacing when no Back button -->
           {% endif %}
-          <button type="submit" class="btn btn-primary">
-            {% if last %}Restart Lessons{% else %}Next{% endif %}
-          </button>
-          {% if last %}
-            <a class="btn btn-primary" href="{{ url_for('quiz_intro') }}">Start Quiz</a>
+          
+          <div>
+            <form method="post" class="d-inline">
+              <button type="submit" class="btn btn-success">
+                {% if last %}Restart Lessons{% else %}Next <i class="bi bi-arrow-right"></i>{% endif %}
+              </button>
+            </form>
+            
+            {% if last %}
+              <a class="btn btn-success ms-2" href="{{ url_for('quiz_intro') }}">
+                Start Quiz <i class="bi bi-check-circle"></i>
+              </a>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Lesson content -->
+        <div>
+          {% if ":" in data.body and ";" in data.body and (data.id == 4 or data.id == 5) %}
+            <ul class="list-group mb-4">
+              {% for country_block in data.body.split(";") %}
+                {% if country_block.strip() %}
+                  {% set parts = country_block.split(":") %}
+                  {% if parts|length > 1 %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                      <strong>{{ parts[0].strip() }}</strong>
+                      <span>{{ parts[1].strip() }}</span>
+                    </li>
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+            </ul>
+          {% elif ";" in data.body %}
+            <ul class="list-group mb-4">
+              {% for item in data.body.split(";") %}
+                {% if item.strip() %}
+                  <li class="list-group-item">{{ item.strip() }}</li>
+                {% endif %}
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p class="lead">{{ data.body }}</p>
           {% endif %}
-        </form>
+        </div>
       </div>
 
       <!-- Right column: Image -->
