@@ -3,7 +3,7 @@ Country Shapes 101 – HW10 "technical prototype"
 Run with:  python app.py
 """
 
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 import json
 
 app = Flask(__name__)
@@ -31,7 +31,30 @@ def learn(lid: int):
     page = LESSONS.get(lid)
     if not page:
         return redirect(url_for("home"))
-    return render_template("learn.html", data=page, last=(lid == len(LESSONS)))
+        
+    # Calculate progress percentage for the progress bar
+    # Skip the introduction (lid==1) and start from South America overview (lid==2)
+    total_content_lessons = len(LESSONS) - 1
+    
+    # For introduction page, set progress to 0
+    if lid == 1:
+        progress_percent = 0
+        position = 0
+    else:
+        # For content lessons, calculate based on position after introduction
+        position = lid - 1
+        progress_percent = int((position / total_content_lessons) * 100)
+    
+    return render_template(
+        "learn.html",
+        data=page, 
+        last=(lid == len(LESSONS)),
+        lnum=lid,
+        position=position,
+        total=total_content_lessons,
+        progress_percent=progress_percent,
+        is_intro=(lid == 1)
+    )
 
 # ---------------- quiz screens -------------------
 @app.route("/quiz_intro")
@@ -40,16 +63,47 @@ def quiz_intro():
 
 @app.route("/quiz/<int:qid>", methods=["GET", "POST"])
 def quiz(qid: int):
+    feedback = None
+    
     if request.method == "POST":
+        prev_qid = qid
         choice = request.form["choice"]
-        session.setdefault("answers", {})[qid] = choice
-        correct = choice == QUIZ[qid]["answer"]
+        session.setdefault("answers", {})[str(prev_qid)] = choice
+        correct = choice == QUIZ[prev_qid]["answer"]
+        
+        # Store feedback in session
+        session["feedback"] = {
+            "correct": correct,
+            "user_answer": choice,
+            "correct_answer": QUIZ[prev_qid]["answer"],
+            "prev_qid": prev_qid
+        }
+        
         nxt = qid + 1
         return redirect(url_for("quiz", qid=nxt) if nxt <= len(QUIZ) else url_for("result"))
+    
+    # Check if there's feedback from previous question
+    feedback = session.pop("feedback", None)
+    
     q = QUIZ.get(qid)
     if not q:
         return redirect(url_for("home"))
-    return render_template("quiz.html", data=q, qnum=qid, total=len(QUIZ))
+    
+    # Only show feedback if it's for the previous question (qid-1)
+    if feedback and int(feedback.get("prev_qid", 0)) != qid - 1:
+        feedback = None
+    
+    # Calculate progress percentage for the progress bar
+    progress_percent = int((qid / len(QUIZ)) * 100)
+    
+    return render_template(
+        "quiz.html", 
+        data=q, 
+        qnum=qid, 
+        total=len(QUIZ), 
+        feedback=feedback,
+        progress_percent=progress_percent
+    )
 
 # ---------------- results ------------------------
 @app.route("/result")

@@ -55,15 +55,21 @@
     },
     {
         "id": 10,
-        "title": "In-depth: Bolivia",
-        "body": "Landlocked country; Located roughly in the center of South America; Borders Peru, Brazil, Paraguay, Argentina, Chile.",
-        "image": "images/bolivia.png"
+        "title": "In-depth: El Salvador",
+        "body": "Smallest country in Central America; Bordered by Guatemala to the west and Honduras to the north and east; The country experiences two main seasons: the dry season (November to April) and the rainy season (May to October); Only Central American country without a Caribbean coastline; Known as the 'Land of Volcanoes' for its 23 active volcanoes.",
+        "image": "images/el_salvador.png"
     },
     {
         "id": 11,
         "title": "In-depth: Venezuela",
         "body": "Northern coast along the Caribbean Sea; Eastern neighbor to Colombia; Western neighbor to Guyana; Often shaped like a triangle or \"chopped square.\"",
         "image": "images/venezuela.png"
+    },
+    {
+        "id": 12,
+        "title": "In-depth: Costa Rica",
+        "body": "Located between Nicaragua and Panama; Has coastlines on both the Caribbean Sea and Pacific Ocean; It's one of the world's leading eco-tourism destinations, with approximately 25% of its territory protected as national parks and reserves; The country is home to about 5% of the world's biodiversity despite occupying only 0.03% of the planet's surface; Has no standing army since 1949.",
+        "image": "images/costa_rica.png"
     }
   ]
   

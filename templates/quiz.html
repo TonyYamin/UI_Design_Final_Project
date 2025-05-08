@@ -4,17 +4,57 @@
 <div class="container py-4">
   <div class="row justify-content-center">
     <div class="col-md-8">
-      <h1 class="h2 mb-3">Question {{ qnum }} of {{ total }}</h1>
-      <p class="lead mb-4">{{ data.prompt }}</p>
-      <img src="{{ url_for('static', filename=data.image) }}" class="img-fluid rounded shadow-sm my-4 app-image" alt="outline">
-      <form method="post">
-        {% for opt in data.choices %}
-          <div class="form-check mb-3">
-            <input class="form-check-input" type="radio" name="choice" id="c{{ loop.index }}" value="{{ opt }}" required>
-            <label class="form-check-label" for="c{{ loop.index }}">{{ opt }}</label>
+      {% if feedback %}
+        {% if feedback.correct %}
+          <div class="alert alert-success mb-4 p-3 d-flex align-items-center">
+            <i class="bi bi-check-circle-fill fs-3 me-3"></i>
+            <div>
+              <h4 class="alert-heading mb-1">Correct!</h4>
+              <p class="mb-0">Great job! "{{ feedback.correct_answer }}" is the correct answer.</p>
+            </div>
           </div>
-        {% endfor %}
-        <button class="btn btn-primary btn-lg mt-4">Submit Answer</button>
+        {% else %}
+          <div class="alert alert-danger mb-4 p-3 d-flex align-items-center">
+            <i class="bi bi-x-circle-fill fs-3 me-3"></i>
+            <div>
+              <h4 class="alert-heading mb-1">Incorrect</h4>
+              <p class="mb-0">You answered "{{ feedback.user_answer }}", but the correct answer is "{{ feedback.correct_answer }}".</p>
+            </div>
+          </div>
+        {% endif %}
+      {% endif %}
+      
+      <h1 class="h2 mb-3">Question {{ qnum }}</h1>
+      
+      <div class="mb-3 p-2 bg-light rounded-3 shadow-sm">
+        <div class="d-flex justify-content-between align-items-center mb-1 px-2">
+          <span class="badge bg-success rounded-pill">{{ qnum }}</span>
+          <span class="badge bg-secondary rounded-pill">{{ total }}</span>
+        </div>
+        <div class="progress" style="height: 8px;">
+          <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar" 
+               style="width: {{ progress_percent }}%;" 
+               aria-valuenow="{{ qnum }}" aria-valuemin="0" aria-valuemax="{{ total }}"></div>
+        </div>
+      </div>
+      
+      <form method="post">
+        <!-- Navigation/Submit button below progress bar -->
+        <div class="d-flex justify-content-end mb-4">
+          <button type="submit" class="btn btn-success">Submit Answer</button>
+        </div>
+        
+        <p class="lead mb-4">{{ data.prompt }}</p>
+        <img src="{{ url_for('static', filename=data.image) }}" class="img-fluid rounded shadow-sm my-4 app-image" alt="outline">
+        
+        <div class="mb-4">
+          {% for opt in data.choices %}
+            <div class="form-check mb-3">
+              <input class="form-check-input" type="radio" name="choice" id="c{{ loop.index }}" value="{{ opt }}" required>
+              <label class="form-check-label" for="c{{ loop.index }}">{{ opt }}</label>
+            </div>
+          {% endfor %}
+        </div>
       </form>
     </div>
   </div>
