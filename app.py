@@ -1,117 +1,139 @@
 """
-Country Shapes 101 – HW10 "technical prototype"
+Country Shapes 101 – HW10 “technical prototype”
 Run with:  python app.py
 """
 
-from flask import Flask, render_template, request, redirect, url_for, session, flash
-import json
+from flask import (
+    Flask, render_template, request, redirect,
+    url_for, session, abort, flash
+)
+import json, os, random
 
 app = Flask(__name__)
 app.secret_key = "replace-this-before-prod"
 
-# ---------- load lesson & quiz data ------------------------------------------
+import random
+
+@app.template_filter("shuffle")
+def shuffle_filter(seq):
+    """Return a new shuffled list so Jinja can do {{ list|shuffle }}."""
+    seq = list(seq)          # copy so original isn’t modified
+    random.shuffle(seq)
+    return seq
+# ────────── Load data ──────────
 with open("data/lessons.json", encoding="utf-8") as fp:
     LESSONS = {item["id"]: item for item in json.load(fp)}
 
 with open("data/quiz.json", encoding="utf-8") as fp:
     QUIZ = {item["id"]: item for item in json.load(fp)}
 
-# ---------- routes -----------------------------------------------------------
+TOTAL_LESSONS = len(LESSONS)
+TOTAL_QUIZ    = len(QUIZ)
+
+# ────────── Home / landing ──────────
 @app.route("/")
 def home():
+    """Introduction page – clears session so a new run starts fresh."""
     session.clear()
     return render_template("home.html")
 
-# ---------------- learning screens ----------------
+# ────────── Learning flow ──────────
 @app.route("/learn/<int:lid>", methods=["GET", "POST"])
 def learn(lid: int):
-    if request.method == "POST":          # "Next" clicked
-        nxt = lid + 1 if lid < len(LESSONS) else 1   # wraps around for demo
-        return redirect(url_for("learn", lid=nxt))
-    page = LESSONS.get(lid)
-    if not page:
+    if lid not in LESSONS:
         return redirect(url_for("home"))
-        
-    # Calculate progress percentage for the progress bar
-    # Skip the introduction (lid==1) and start from South America overview (lid==2)
-    total_content_lessons = len(LESSONS) - 1
-    
-    # For introduction page, set progress to 0
-    if lid == 1:
-        progress_percent = 0
-        position = 0
-    else:
-        # For content lessons, calculate based on position after introduction
-        position = lid - 1
-        progress_percent = int((position / total_content_lessons) * 100)
-    
+
+    if request.method == "POST":                 # “Next” button
+        nxt = lid + 1 if lid < TOTAL_LESSONS else 1
+        return redirect(url_for("learn", lid=nxt))
+
+    # progress: treat lesson 1 as intro → not counted
+    total_content = TOTAL_LESSONS - 1
+    position = max(lid - 1, 0)
+    progress_percent = int((position / total_content) * 100) if total_content else 0
+
     return render_template(
         "learn.html",
-        data=page, 
-        last=(lid == len(LESSONS)),
+        data=LESSONS[lid],
         lnum=lid,
+        total=total_content,
         position=position,
-        total=total_content_lessons,
         progress_percent=progress_percent,
-        is_intro=(lid == 1)
+        is_intro=(lid == 1),
+        last=(lid == TOTAL_LESSONS)
     )
 
-# ---------------- quiz screens -------------------
+# ────────── Quiz intro ──────────
 @app.route("/quiz_intro")
 def quiz_intro():
     return render_template("quiz_intro.html")
 
+# ────────── Quiz Q/A ──────────
 @app.route("/quiz/<int:qid>", methods=["GET", "POST"])
 def quiz(qid: int):
+    if qid not in QUIZ:
+        return redirect(url_for("home"))
+
+    qdata = QUIZ[qid]              # current question dict
     feedback = None
-    
+
+    # ===== handle POST from previous screen =====
     if request.method == "POST":
-        prev_qid = qid
-        choice = request.form["choice"]
-        session.setdefault("answers", {})[str(prev_qid)] = choice
-        correct = choice == QUIZ[prev_qid]["answer"]
-        
-        # Store feedback in session
+        # What was just answered? (that’s qid in the URL)
+        qtype = qdata["type"]
+
+        if qtype == "mc":
+            user_answer = request.form.get("choice")
+            correct = user_answer == qdata["answer"]
+        elif qtype == "match":
+            user_answer = "matched" if request.form.get("match_done") == "done" else "incomplete"
+            correct = (user_answer == "matched")
+        else:
+            abort(400, f"Unknown question type: {qtype}")
+
+        # persist per‑question record
+        session.setdefault("answers", {})[str(qid)] = user_answer
+        # store feedback for next GET
         session["feedback"] = {
             "correct": correct,
-            "user_answer": choice,
-            "correct_answer": QUIZ[prev_qid]["answer"],
-            "prev_qid": prev_qid
+            "user_answer": user_answer,
+            "correct_answer": qdata.get("answer", "all matched"),
+            "prev_qid": qid
         }
-        
+
         nxt = qid + 1
-        return redirect(url_for("quiz", qid=nxt) if nxt <= len(QUIZ) else url_for("result"))
-    
-    # Check if there's feedback from previous question
+        return redirect(url_for("quiz", qid=nxt) if nxt <= TOTAL_QUIZ else url_for("result"))
+
+    # ===== GET: show question screen =====
     feedback = session.pop("feedback", None)
-    
-    q = QUIZ.get(qid)
-    if not q:
-        return redirect(url_for("home"))
-    
-    # Only show feedback if it's for the previous question (qid-1)
     if feedback and int(feedback.get("prev_qid", 0)) != qid - 1:
-        feedback = None
-    
-    # Calculate progress percentage for the progress bar
-    progress_percent = int((qid / len(QUIZ)) * 100)
-    
+        feedback = None                       # stale feedback -> discard
+
+    progress_percent = int((qid / TOTAL_QUIZ) * 100)
+
     return render_template(
-        "quiz.html", 
-        data=q, 
-        qnum=qid, 
-        total=len(QUIZ), 
+        "quiz.html",
+        data=qdata,
+        qnum=qid,
+        total=TOTAL_QUIZ,
         feedback=feedback,
         progress_percent=progress_percent
     )
 
-# ---------------- results ------------------------
+# ────────── Results summary ──────────
 @app.route("/result")
 def result():
     answers = session.get("answers", {})
-    score = sum(1 for qid, ans in answers.items() if QUIZ[int(qid)]["answer"] == ans)
-    return render_template("result.html", score=score, total=len(QUIZ))
+    score = 0
+    for qid_str, ans in answers.items():
+        q = QUIZ[int(qid_str)]
+        if q["type"] == "mc" and ans == q["answer"]:
+            score += 1
+        elif q["type"] == "match" and ans == "matched":
+            score += 1
+    return render_template("result.html", score=score, total=TOTAL_QUIZ)
 
-# ---------------------------------------------------------------------------
+# ────────── Dev runner ──────────
 if __name__ == "__main__":
-    app.run(debug=True)
+    # bind to 0.0.0.0 if you need phone/tablet access on LAN
+    app.run(debug=True, host="127.0.0.1", port=5000)

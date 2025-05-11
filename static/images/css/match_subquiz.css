@@ -1,0 +1,11 @@
+.match-img  { width:100px;height:auto;cursor:pointer;transition:transform .15s; }
+.match-img:hover       { transform:scale(1.06); }
+.match-img.selected    { outline:3px solid #0d6efd; }
+.match-img.correct     { outline:3px solid #198754; filter:drop-shadow(0 0 2px #198754); }
+.match-img.wrong       { outline:3px solid #dc3545; }
+
+.name-pill {
+  cursor:pointer;user-select:none;
+}
+.name-pill:hover:not(.disabled) { background:#e7f1ff; }
+.name-pill.disabled             { pointer-events:none; }

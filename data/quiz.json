@@ -1,73 +1,93 @@
 [
-    {
-      "id": 1,
-      "prompt": "Which country is shown in this outline?",
-      "image": "brazil_outline.png",
-      "choices": ["Argentina", "Brazil", "Costa Rica", "Peru"],
-      "answer": "Brazil"
-    },
-    {
-      "id": 2,
-      "prompt": "This country reaches the far southern tip of the continent.",
-      "image": "argentina_outline.png",
-      "choices": ["Uruguay", "Panama", "Argentina", "Paraguay"],
-      "answer": "Argentina"
-    },
-    {
-      "id": 3,
-      "prompt": "Identify the country assembled from these fragments.",
-      "image": "colombia_puzzle.png",
-      "choices": ["Venezuela", "Colombia", "Guatemala", "Suriname"],
-      "answer": "Colombia"
-    },
-    {
-      "id": 4,
-      "prompt": "This Central American country is split in half by a canal where boats can cross from the Pacific to the Atlantic Ocean.",
-      "image": "panama_outline.png",
-      "choices": ["Nicaragua", "Panama", "Costa Rica", "Honduras"],
-      "answer": "Panama"
-    },
-    {
-      "id": 5,
-      "prompt": "Drag-label question (outline shown). Which country is the long ribbon?",
-      "image": "chile_outline.png",
-      "choices": ["Chile", "El Salvador", "Guyana", "Paraguay"],
-      "answer": "Chile"
-    },
-    {
-      "id": 6,
-      "prompt": "The smallest country in Central America, bordered by Guatemala and Honduras.",
-      "image": "el_salvador_outline.png",
-      "choices": ["Belize", "El Salvador", "Nicaragua", "Costa Rica"],
-      "answer": "El Salvador"
-    },
-    {
-      "id": 7,
-      "prompt": "Which oil-rich country is located on the northern coast of South America?",
-      "image": "venezuela_outline.png",
-      "choices": ["Venezuela", "Honduras", "Suriname", "Ecuador"],
-      "answer": "Venezuela"
-    },
-    {
-      "id": 8,
-      "prompt": "This Central American country is known for its eco-tourism and has abolished its military.",
-      "image": "costa_rica_outline.png",
-      "choices": ["Uruguay", "Costa Rica", "Belize", "Guatemala"],
-      "answer": "Costa Rica"
-    },
-    {
-      "id": 9,
-      "prompt": "Which small country is located between Brazil and Argentina?",
-      "image": "uruguay_outline.png",
-      "choices": ["Guyana", "Nicaragua", "Uruguay", "Ecuador"],
-      "answer": "Uruguay"
-    },
-    {
-      "id": 10,
-      "prompt": "This country is named after the equator that runs through it. Which is it?",
-      "image": "ecuador_outline.png",
-      "choices": ["Colombia", "Ecuador", "Belize", "Peru"],
-      "answer": "Ecuador"
-    }
-  ]
-  
+  {
+    "id": 1,
+    "type": "mc",
+    "prompt": "Which country is shown in this outline?",
+    "image": "images/brazil_outline.png",
+    "choices": ["Argentina", "Brazil", "Costa Rica", "Peru"],
+    "answer": "Brazil"
+  },
+  {
+    "id": 2,
+    "type": "mc",
+    "prompt": "This country reaches the far southern tip of the continent.",
+    "image": "images/argentina_outline.png",
+    "choices": ["Uruguay", "Panama", "Argentina", "Paraguay"],
+    "answer": "Argentina"
+  },
+  {
+    "id": 3,
+    "type": "mc",
+    "prompt": "Identify the country assembled from these fragments.",
+    "image": "images/colombia.png",
+    "choices": ["Venezuela", "Colombia", "Guatemala", "Suriname"],
+    "answer": "Colombia"
+  },
+  {
+    "id": 4,
+    "type": "mc",
+    "prompt": "This country is split in half by a canal where boats can cross from the Pacific to the Atlantic Ocean.",
+    "image": "images/panama_outline.png",
+    "choices": ["Nicaragua", "Panama", "Costa Rica", "Honduras"],
+    "answer": "Panama"
+  },
+  {
+    "id": 5,
+    "type": "mc",
+    "prompt": "Which country is the long, thin ribbon along the Pacific coast?",
+    "image": "images/chile.png",
+    "choices": ["Chile", "El Salvador", "Guyana", "Paraguay"],
+    "answer": "Chile"
+  },
+  {
+    "id": 6,
+    "type": "mc",
+    "prompt": "The smallest country in Central America, bordered by Guatemala and Honduras.",
+    "image": "images/el_salvador_outline.png",
+    "choices": ["Belize", "El Salvador", "Nicaragua", "Costa Rica"],
+    "answer": "El Salvador"
+  },
+  {
+    "id": 7,
+    "type": "mc",
+    "prompt": "Which oil‑rich country is located on the northern coast of South America?",
+    "image": "images/venezuela.png",
+    "choices": ["Venezuela", "Honduras", "Suriname", "Ecuador"],
+    "answer": "Venezuela"
+  },
+  {
+    "id": 8,
+    "type": "mc",
+    "prompt": "This Central American nation is famous for eco‑tourism and has abolished its military.",
+    "image": "images/costa_rica_outline.png",
+    "choices": ["Uruguay", "Costa Rica", "Belize", "Guatemala"],
+    "answer": "Costa Rica"
+  },
+  {
+    "id": 9,
+    "type": "match",
+    "region": "central",
+    "prompt": "Match every Central‑American outline with its country name.",
+    "outlines": [
+      {"id": "el_salvador",  "file": "images/el_salvador_outline.png"},
+      {"id": "costa_rica",   "file": "images/costa_rica_outline.png"},
+      {"id": "panama",       "file": "images/panama_outline.png"}
+    ]
+  },
+  {
+    "id": 10,
+    "type": "match",
+    "region": "south",
+    "prompt": "Match every South‑American outline with its country name.",
+    "outlines": [
+      {"id": "colombia",       "file": "images/colombia_outline.png"},
+      {"id": "venezuela",      "file": "images/venezuela_outline.png"},
+      {"id": "bolivia",        "file": "images/bolivia_outline.png"},
+      {"id": "brazil",         "file": "images/brazil_outline.png"},
+      {"id": "paraguay",       "file": "images/paraguay_outline.png"},
+      {"id": "uruguay",        "file": "images/uruguay_outline.png"},
+      {"id": "argentina",      "file": "images/argentina_outline.png"},
+      {"id": "chile",          "file": "images/chile_outline.png"}
+    ]
+  }
+]

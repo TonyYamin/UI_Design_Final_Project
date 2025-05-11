@@ -1,9 +1,25 @@
 {% extends "base.html" %}
 {% block title %}Quiz {{ qnum }}/{{ total }}{% endblock %}
+
 {% block content %}
+<!-- ───────────  Match‑mode styles  ─────────── -->
+<style>
+  .match-img  { width:110px;height:auto;cursor:pointer;transition:transform .15s;user-select:none; }
+  .match-img:hover       { transform:scale(1.06); }
+  .match-img.selected    { outline:3px solid #0d6efd; }
+  .match-img.correct     { outline:3px solid #198754;filter:drop-shadow(0 0 2px #198754); }
+  .match-img.wrong       { outline:3px solid #dc3545; }
+
+  .name-pill { cursor:pointer;user-select:none; }
+  .name-pill:hover:not(.disabled) { background:#e7f1ff; }
+  .name-pill.disabled   { pointer-events:none; }
+</style>
+
 <div class="container py-4">
   <div class="row justify-content-center">
     <div class="col-md-8">
+
+      {# ──── feedback banner from previous POST ──── #}
       {% if feedback %}
         {% if feedback.correct %}
           <div class="alert alert-success mb-4 p-3 d-flex align-items-center">
@@ -23,40 +39,128 @@
           </div>
         {% endif %}
       {% endif %}
-      
+
+      {# ──── header & progress ──── #}
       <h1 class="h2 mb-3">Question {{ qnum }}</h1>
-      
+
       <div class="mb-3 p-2 bg-light rounded-3 shadow-sm">
         <div class="d-flex justify-content-between align-items-center mb-1 px-2">
           <span class="badge bg-success rounded-pill">{{ qnum }}</span>
           <span class="badge bg-secondary rounded-pill">{{ total }}</span>
         </div>
         <div class="progress" style="height: 8px;">
-          <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar" 
-               style="width: {{ progress_percent }}%;" 
-               aria-valuenow="{{ qnum }}" aria-valuemin="0" aria-valuemax="{{ total }}"></div>
+          <div class="progress-bar bg-success progress-bar-striped progress-bar-animated"
+               role="progressbar"
+               style="width: {{ progress_percent }}%;"
+               aria-valuenow="{{ qnum }}" aria-valuemin="0" aria-valuemax="{{ total }}">
+          </div>
         </div>
       </div>
-      
-      <form method="post">
-        <!-- Navigation/Submit button below progress bar -->
-        <div class="d-flex justify-content-end mb-4">
-          <button type="submit" class="btn btn-success">Submit Answer</button>
-        </div>
-        
-        <p class="lead mb-4">{{ data.prompt }}</p>
-        <img src="{{ url_for('static', filename=data.image) }}" class="img-fluid rounded shadow-sm my-4 app-image" alt="outline">
-        
-        <div class="mb-4">
-          {% for opt in data.choices %}
-            <div class="form-check mb-3">
-              <input class="form-check-input" type="radio" name="choice" id="c{{ loop.index }}" value="{{ opt }}" required>
-              <label class="form-check-label" for="c{{ loop.index }}">{{ opt }}</label>
-            </div>
-          {% endfor %}
-        </div>
-      </form>
+
+      {# ──── MULTIPLE‑CHOICE QUESTION ──── #}
+      {% if data.type == 'mc' %}
+        <form method="post">
+          <div class="d-flex justify-content-end mb-4">
+            <button type="submit" class="btn btn-success">Submit Answer</button>
+          </div>
+
+          <p class="lead mb-4">{{ data.prompt }}</p>
+          <img src="{{ url_for('static', filename=data.image) }}"
+               class="img-fluid rounded shadow-sm my-4 app-image"
+               alt="outline">
+
+          <div class="mb-4">
+            {% for opt in data.choices %}
+              <div class="form-check mb-3">
+                <input class="form-check-input" type="radio"
+                       name="choice" id="c{{ loop.index }}" value="{{ opt }}" required>
+                <label class="form-check-label" for="c{{ loop.index }}">{{ opt }}</label>
+              </div>
+            {% endfor %}
+          </div>
+        </form>
+
+      {# ──── MATCH QUESTION (Q 9 / Q 10) ──── #}
+      {% elif data.type == 'match' %}
+        <form method="post" id="matchForm">
+          <!-- hidden flag set to 'done' in JS when all matches correct -->
+          <input type="hidden" name="match_done" id="matchDone">
+          <div class="d-flex justify-content-end mb-4">
+            <button type="submit" class="btn btn-success" disabled id="submitMatch">
+              Submit Answer
+            </button>
+          </div>
+
+          <p class="lead mb-4">{{ data.prompt }}</p>
+
+          <!-- outlines -->
+          <div class="d-flex flex-wrap gap-3 mb-4" id="outlineWrap">
+            {% for o in data.outlines %}
+              <img src="{{ url_for('static', filename=o.file) }}"
+                   class="match-img shadow-sm"
+                   data-country="{{ o.id }}"
+                   alt="{{ o.id|replace('_',' ')|title }}">
+            {% endfor %}
+          </div>
+
+          <!-- shuffled names -->
+          <div class="d-flex flex-wrap gap-2" id="nameWrap">
+            {% set shuffled = data.outlines|shuffle %}
+            {% for n in shuffled %}
+              <span class="badge bg-primary name-pill"
+                    data-country="{{ n.id }}">
+                {{ n.id|replace('_',' ')|title }}
+              </span>
+            {% endfor %}
+          </div>
+        </form>
+      {% endif %}
+
     </div>
   </div>
 </div>
+
+{% if data.type == 'match' %}
+<!-- ───────────  Match‑mode script  ─────────── -->
+<script>
+  const outlines = document.querySelectorAll(".match-img");
+  const namePills = document.querySelectorAll(".name-pill");
+  const submitBtn = document.getElementById("submitMatch");
+  const hiddenFlag= document.getElementById("matchDone");
+
+  let selectedOutline = null, matched = 0;
+
+  outlines.forEach(img=>{
+    img.addEventListener("click", ()=>{
+      outlines.forEach(i=>i.classList.remove("selected"));
+      selectedOutline = img;
+      img.classList.add("selected");
+    });
+  });
+
+  namePills.forEach(pill=>{
+    pill.addEventListener("click", ()=>{
+      if (!selectedOutline || pill.classList.contains("disabled")) return;
+      const ok = pill.dataset.country === selectedOutline.dataset.country;
+      if (ok){
+        selectedOutline.classList.add("correct");
+        pill.classList.replace("bg-primary","bg-success");
+        pill.classList.add("disabled");
+        matched++;
+        if (matched === outlines.length){
+          hiddenFlag.value = "done";
+          submitBtn.disabled = false;          // enable manual submit
+          // auto‑submit after short delay for smoother UX
+          setTimeout(()=>document.getElementById("matchForm").submit(), 800);
+        }
+      } else {
+        selectedOutline.classList.add("wrong");
+        setTimeout(()=>selectedOutline.classList.remove("wrong"),600);
+      }
+      selectedOutline.classList.remove("selected");
+      selectedOutline = null;
+    });
+  });
+</script>
+{% endif %}
 {% endblock %}
