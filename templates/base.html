@@ -14,6 +14,7 @@
       body {
         font-family: var(--font-family-body);
         line-height: 1.6;
+        padding-top: 60px; /* Reduced padding-top for thinner navbar */
       }
 
       h1, h2, h3, h4, h5, h6, .navbar-brand {
@@ -40,8 +41,15 @@
       }
 
       .navbar {
-        margin-bottom: 2rem;
+        margin-bottom: 0;
         background-color: #888a8d;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1030;
+        transition: all 0.3s ease;
+        padding: 0.5rem 0; /* Reduced padding to make navbar thinner */
       }
 
       .navbar-brand, .nav-link {
@@ -74,6 +82,11 @@
         font-family: var(--font-family-body);
         font-weight: 400;
         letter-spacing: -0.01em;
+      }
+
+      /* Add margin to the first element after navbar */
+      .container.py-4 {
+        margin-top: 1rem; /* Add space between navbar and content */
       }
     </style>
   </head>
