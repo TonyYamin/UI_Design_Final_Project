@@ -11,15 +11,16 @@
           <div class="card-body p-4">
             <h2 class="h4 mb-4">What to Expect:</h2>
             <ul class="list-unstyled">
-              <li class="mb-3">10 multiple-choice questions</li>
+              <li class="mb-3">Multiple-choice questions and matching exercises</li>
               <li class="mb-3">Country outlines and geographical features</li>
+              <li class="mb-3">Choose between Easy and Hard difficulty levels</li>
               <li class="mb-3">Immediate feedback on your answers</li>
               <li class="mb-3">Final score at the end</li>
             </ul>
           </div>
         </div>
 
-        <a href="{{ url_for('quiz', qid=1) }}" class="btn btn-success btn-lg">
+        <a href="{{ url_for('select_difficulty') }}" class="btn btn-success btn-lg">
           <i class="bi bi-check-circle"></i> Start Quiz
         </a>
       </div>

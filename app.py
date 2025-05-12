@@ -26,6 +26,7 @@ def shuffle_filter(seq):
     seq = list(seq)          # copy so original isn't modified
     random.shuffle(seq)
     return seq
+
 # ────────── Load data ──────────
 with open("data/lessons.json", encoding="utf-8") as fp:
     LESSONS = {item["id"]: item for item in json.load(fp)}
@@ -74,13 +75,38 @@ def learn(lid: int):
 def quiz_intro():
     return render_template("quiz_intro.html")
 
+# ────────── Difficulty selection ──────────
+@app.route("/select_difficulty", methods=["GET", "POST"])
+def select_difficulty():
+    if request.method == "POST":
+        difficulty = request.form.get("difficulty")
+        if difficulty in ["easy", "hard"]:
+            session["quiz_difficulty"] = difficulty
+            # Filter questions by difficulty
+            filtered_quiz = {k: v for k, v in QUIZ.items() if v["difficulty"] == difficulty}
+            session["filtered_quiz"] = filtered_quiz
+            session["total_quiz"] = len(filtered_quiz)
+            return redirect(url_for("quiz", qid=1))
+    return render_template("select_difficulty.html")
+
 # ────────── Quiz Q/A ──────────
 @app.route("/quiz/<int:qid>", methods=["GET", "POST"])
 def quiz(qid: int):
-    if qid not in QUIZ:
+    # Check if difficulty is selected
+    if "quiz_difficulty" not in session:
+        return redirect(url_for("select_difficulty"))
+    
+    filtered_quiz = session.get("filtered_quiz", {})
+    if not filtered_quiz:
+        return redirect(url_for("select_difficulty"))
+    
+    # Convert qid to actual question ID in filtered quiz
+    question_ids = sorted(filtered_quiz.keys())
+    if not question_ids or qid > len(question_ids):
         return redirect(url_for("home"))
-
-    qdata = QUIZ[qid]              # current question dict
+    
+    actual_qid = question_ids[qid - 1]
+    qdata = filtered_quiz[actual_qid]
     feedback = None
 
     # ===== handle POST from previous screen =====
@@ -149,18 +175,18 @@ def quiz(qid: int):
         logger.debug(f"Current session answers: {session['answers']}")
 
         # If this was the last question, redirect to results
-        if qid == TOTAL_QUIZ:
+        if qid == session["total_quiz"]:
             logger.debug("Last question completed, redirecting to results")
             return redirect(url_for("result"))
 
     # ===== GET: show question screen =====
-    progress_percent = int((qid / TOTAL_QUIZ) * 100)
+    progress_percent = int((qid / session["total_quiz"]) * 100)
 
     return render_template(
         "quiz.html",
         data=qdata,
         qnum=qid,
-        total=TOTAL_QUIZ,
+        total=session["total_quiz"],
         feedback=feedback,
         progress_percent=progress_percent
     )
@@ -176,42 +202,17 @@ def result():
     logger.debug(f"Total questions answered: {total_questions}")
     logger.debug(f"Answers in session: {answers}")
     
-    # First, verify we have answers for all questions
-    for qid in range(1, TOTAL_QUIZ + 1):
-        if str(qid) not in answers:
-            logger.debug(f"Warning: No answer found for question {qid}")
-    
     # Calculate score
     for qid_str, ans_data in answers.items():
-        qid = int(qid_str)
-        logger.debug(f"\nProcessing question {qid}:")
-        logger.debug(f"Answer data: {ans_data}")
-        
-        if isinstance(ans_data, dict):
-            if ans_data.get("correct", False):
-                score += 1
-                logger.debug(f"Question {qid} marked correct (new format)")
-            else:
-                logger.debug(f"Question {qid} marked incorrect (new format)")
-        else:
-            # Old format - check against the question
-            q = QUIZ[qid]
-            if q["type"] == "mc" and ans_data == q["answer"]:
-                score += 1
-                logger.debug(f"Question {qid} marked correct (old format)")
-            elif q["type"] == "match" and ans_data == "matched":
-                score += 1
-                logger.debug(f"Question {qid} marked correct (old format)")
-            else:
-                logger.debug(f"Question {qid} marked incorrect (old format)")
+        if isinstance(ans_data, dict) and ans_data.get("correct", False):
+            score += 1
     
     logger.debug(f"\nFinal calculation:")
     logger.debug(f"Total questions answered: {total_questions}")
     logger.debug(f"Total correct answers: {score}")
-    logger.debug(f"Final score: {score}/{TOTAL_QUIZ}")
+    logger.debug(f"Final score: {score}/{session['total_quiz']}")
     
-    # Ensure we're using TOTAL_QUIZ for the total
-    return render_template("result.html", score=score, total=TOTAL_QUIZ)
+    return render_template("result.html", score=score, total=session["total_quiz"])
 
 # ────────── Dev runner ──────────
 if __name__ == "__main__":

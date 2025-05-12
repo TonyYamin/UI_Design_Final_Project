@@ -2,6 +2,7 @@
   {
     "id": 1,
     "type": "mc",
+    "difficulty": "easy",
     "prompt": "Which country is shown in this outline?",
     "image": "images/brazil_outline.png",
     "choices": ["Argentina", "Brazil", "Costa Rica", "Peru"],
@@ -10,6 +11,7 @@
   {
     "id": 2,
     "type": "match",
+    "difficulty": "hard",
     "region": "central",
     "prompt": "Match every Central‑American outline with its country name.",
     "outlines": [
@@ -21,6 +23,7 @@
   {
     "id": 3,
     "type": "mc",
+    "difficulty": "easy",
     "prompt": "This country reaches the far southern tip of the continent.",
     "image": "images/argentina_outline.png",
     "choices": ["Uruguay", "Panama", "Argentina", "Paraguay"],
@@ -29,6 +32,7 @@
   {
     "id": 4,
     "type": "mc",
+    "difficulty": "hard",
     "prompt": "Identify the country assembled from these fragments.",
     "image": "images/colombia_outline.png",
     "choices": ["Venezuela", "Colombia", "Guatemala", "Suriname"],
@@ -37,6 +41,7 @@
   {
     "id": 5,
     "type": "mc",
+    "difficulty": "easy",
     "prompt": "This country is split in half by a canal where boats can cross from the Pacific to the Atlantic Ocean.",
     "image": "images/panama_outline.png",
     "choices": ["Nicaragua", "Panama", "Costa Rica", "Honduras"],
@@ -45,6 +50,7 @@
   {
     "id": 6,
     "type": "mc",
+    "difficulty": "easy",
     "prompt": "Which country is the long, thin ribbon along the Pacific coast?",
     "image": "images/chile_outline.png",
     "choices": ["Chile", "El Salvador", "Guyana", "Paraguay"],
@@ -53,6 +59,7 @@
   {
     "id": 7,
     "type": "mc",
+    "difficulty": "hard",
     "prompt": "The smallest country in Central America, bordered by Guatemala and Honduras.",
     "image": "images/el_salvador_outline.png",
     "choices": ["Belize", "El Salvador", "Nicaragua", "Costa Rica"],
@@ -61,6 +68,7 @@
   {
     "id": 8,
     "type": "mc",
+    "difficulty": "hard",
     "prompt": "Which oil‑rich country is located on the northern coast of South America?",
     "image": "images/venezuela_outline.png",
     "choices": ["Venezuela", "Honduras", "Suriname", "Ecuador"],
@@ -69,6 +77,7 @@
   {
     "id": 9,
     "type": "mc",
+    "difficulty": "easy",
     "prompt": "This Central American nation is famous for eco‑tourism and has abolished its military.",
     "image": "images/costa_rica_outline.png",
     "choices": ["Uruguay", "Costa Rica", "Belize", "Guatemala"],
@@ -78,6 +87,7 @@
   {
     "id": 10,
     "type": "match",
+    "difficulty": "hard",
     "region": "south",
     "prompt": "Match every South‑American outline with its country name.",
     "outlines": [
