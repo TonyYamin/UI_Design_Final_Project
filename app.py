@@ -1,5 +1,5 @@
 """
-Country Shapes 101 – HW10 “technical prototype”
+Country Shapes 101 – HW10 "technical prototype"
 Run with:  python app.py
 """
 
@@ -17,7 +17,7 @@ import random
 @app.template_filter("shuffle")
 def shuffle_filter(seq):
     """Return a new shuffled list so Jinja can do {{ list|shuffle }}."""
-    seq = list(seq)          # copy so original isn’t modified
+    seq = list(seq)          # copy so original isn't modified
     random.shuffle(seq)
     return seq
 # ────────── Load data ──────────
@@ -43,11 +43,11 @@ def learn(lid: int):
     if lid not in LESSONS:
         return redirect(url_for("home"))
 
-    if request.method == "POST":                 # “Next” button
+    if request.method == "POST":                 # "Next" button
         nxt = lid + 1 if lid < TOTAL_LESSONS else 1
         return redirect(url_for("learn", lid=nxt))
 
-    # progress: treat lesson 1 as intro → not counted
+    # progress: treat lesson 1 as intro → not counted
     total_content = TOTAL_LESSONS - 1
     position = max(lid - 1, 0)
     progress_percent = int((position / total_content) * 100) if total_content else 0
@@ -79,7 +79,7 @@ def quiz(qid: int):
 
     # ===== handle POST from previous screen =====
     if request.method == "POST":
-        # What was just answered? (that’s qid in the URL)
+        # What was just answered? (that's qid in the URL)
         qtype = qdata["type"]
 
         if qtype == "mc":
@@ -93,22 +93,14 @@ def quiz(qid: int):
 
         # persist per‑question record
         session.setdefault("answers", {})[str(qid)] = user_answer
-        # store feedback for next GET
-        session["feedback"] = {
+        # store feedback for current question
+        feedback = {
             "correct": correct,
             "user_answer": user_answer,
-            "correct_answer": qdata.get("answer", "all matched"),
-            "prev_qid": qid
+            "correct_answer": qdata.get("answer", "all matched")
         }
 
-        nxt = qid + 1
-        return redirect(url_for("quiz", qid=nxt) if nxt <= TOTAL_QUIZ else url_for("result"))
-
     # ===== GET: show question screen =====
-    feedback = session.pop("feedback", None)
-    if feedback and int(feedback.get("prev_qid", 0)) != qid - 1:
-        feedback = None                       # stale feedback -> discard
-
     progress_percent = int((qid / TOTAL_QUIZ) * 100)
 
     return render_template(

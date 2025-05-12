@@ -13,13 +13,17 @@
   .name-pill { cursor:pointer;user-select:none; }
   .name-pill:hover:not(.disabled) { background:#e7f1ff; }
   .name-pill.disabled   { pointer-events:none; }
+  
+  .form-check-input:disabled + .form-check-label {
+    opacity: 0.7;
+  }
 </style>
 
 <div class="container py-4">
   <div class="row justify-content-center">
     <div class="col-md-8">
 
-      {# ──── feedback banner from previous POST ──── #}
+      {# ──── feedback banner ──── #}
       {% if feedback %}
         {% if feedback.correct %}
           <div class="alert alert-success mb-4 p-3 d-flex align-items-center">
@@ -59,9 +63,13 @@
 
       {# ──── MULTIPLE‑CHOICE QUESTION ──── #}
       {% if data.type == 'mc' %}
-        <form method="post">
+        <form method="post" id="quizForm">
           <div class="d-flex justify-content-end mb-4">
-            <button type="submit" class="btn btn-success">Submit Answer</button>
+            {% if not feedback %}
+              <button type="submit" class="btn btn-success">Submit Answer</button>
+            {% else %}
+              <a href="{{ url_for('quiz', qid=qnum+1) }}" class="btn btn-success">Next Question</a>
+            {% endif %}
           </div>
 
           <p class="lead mb-4">{{ data.prompt }}</p>
@@ -73,22 +81,29 @@
             {% for opt in data.choices %}
               <div class="form-check mb-3">
                 <input class="form-check-input" type="radio"
-                       name="choice" id="c{{ loop.index }}" value="{{ opt }}" required>
+                       name="choice" id="c{{ loop.index }}" value="{{ opt }}" 
+                       {% if feedback %}disabled{% endif %}
+                       {% if feedback and opt == feedback.user_answer %}checked{% endif %}
+                       required>
                 <label class="form-check-label" for="c{{ loop.index }}">{{ opt }}</label>
               </div>
             {% endfor %}
           </div>
         </form>
 
-      {# ──── MATCH QUESTION (Q 9 / Q 10) ──── #}
+      {# ──── MATCH QUESTION (Q 9 / Q 10) ──── #}
       {% elif data.type == 'match' %}
         <form method="post" id="matchForm">
           <!-- hidden flag set to 'done' in JS when all matches correct -->
           <input type="hidden" name="match_done" id="matchDone">
           <div class="d-flex justify-content-end mb-4">
-            <button type="submit" class="btn btn-success" disabled id="submitMatch">
-              Submit Answer
-            </button>
+            {% if not feedback %}
+              <button type="submit" class="btn btn-success" disabled id="submitMatch">
+                Submit Answer
+              </button>
+            {% else %}
+              <a href="{{ url_for('quiz', qid=qnum+1) }}" class="btn btn-success">Next Question</a>
+            {% endif %}
           </div>
 
           <p class="lead mb-4">{{ data.prompt }}</p>
@@ -99,6 +114,7 @@
               <img src="{{ url_for('static', filename=o.file) }}"
                    class="match-img shadow-sm"
                    data-country="{{ o.id }}"
+                   {% if feedback %}style="pointer-events: none;"{% endif %}
                    alt="{{ o.id|replace('_',' ')|title }}">
             {% endfor %}
           </div>
@@ -108,7 +124,8 @@
             {% set shuffled = data.outlines|shuffle %}
             {% for n in shuffled %}
               <span class="badge bg-primary name-pill"
-                    data-country="{{ n.id }}">
+                    data-country="{{ n.id }}"
+                    {% if feedback %}style="pointer-events: none;"{% endif %}>
                 {{ n.id|replace('_',' ')|title }}
               </span>
             {% endfor %}
@@ -120,7 +137,7 @@
   </div>
 </div>
 
-{% if data.type == 'match' %}
+{% if data.type == 'match' and not feedback %}
 <!-- ───────────  Match‑mode script  ─────────── -->
 <script>
   const outlines = document.querySelectorAll(".match-img");
@@ -150,8 +167,6 @@
         if (matched === outlines.length){
           hiddenFlag.value = "done";
           submitBtn.disabled = false;          // enable manual submit
-          // auto‑submit after short delay for smoother UX
-          setTimeout(()=>document.getElementById("matchForm").submit(), 800);
         }
       } else {
         selectedOutline.classList.add("wrong");
