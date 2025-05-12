@@ -5,9 +5,46 @@
   <div class="row justify-content-center">
     <div class="col-md-8 text-center">
       <h1 class="display-4 mb-4">Quiz Complete!</h1>
-      <p class="display-6 mb-5">You scored <strong>{{ score }}/{{ total }}</strong></p>
-      <a class="btn btn-success btn-lg" href="{{ url_for('home') }}">Try Again</a>
+      
+      <!-- Score Card -->
+      <div class="card shadow-sm mb-5">
+        <div class="card-body p-5">
+          <h2 class="display-1 mb-3">{{ score }}/{{ total }}</h2>
+          <p class="lead mb-0">
+            {% if score == total %}
+              Perfect score! Excellent job! 🎉
+            {% elif score >= total * 0.8 %}
+              Great job! You're really good at this! 🌟
+            {% elif score >= total * 0.6 %}
+              Good effort! Keep practicing! 💪
+            {% else %}
+              Keep learning! You'll get better! 📚
+            {% endif %}
+          </p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="d-flex justify-content-center gap-3">
+        <a class="btn btn-success btn-lg" href="{{ url_for('home') }}">
+          <i class="bi bi-house"></i> Back to Home
+        </a>
+        <a class="btn btn-primary btn-lg" href="{{ url_for('quiz_intro') }}">
+          <i class="bi bi-arrow-repeat"></i> Try Again
+        </a>
+      </div>
     </div>
   </div>
 </div>
+
+<style>
+  .card {
+    border: none;
+    background-color: #f8f9fa;
+  }
+  .display-1 {
+    font-weight: bold;
+    color: #198754;
+  }
+</style>
 {% endblock %}
