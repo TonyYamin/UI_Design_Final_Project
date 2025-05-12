@@ -98,7 +98,7 @@
           <input type="hidden" name="match_done" id="matchDone">
           <div class="d-flex justify-content-end mb-4">
             {% if not feedback %}
-              <button type="submit" class="btn btn-success" disabled id="submitMatch">
+              <button type="submit" class="btn btn-success" id="submitMatch">
                 Submit Answer
               </button>
             {% else %}
@@ -107,28 +107,45 @@
           </div>
 
           <p class="lead mb-4">{{ data.prompt }}</p>
+          
+          <!-- Instructions for matching -->
+          <div class="alert alert-info mb-4">
+            <h5 class="alert-heading mb-2">How to match:</h5>
+            <ol class="mb-0">
+              <li>Click on a country outline to select it</li>
+              <li>Click on the correct country name to match</li>
+              <li>Correct matches will turn green</li>
+              <li>You can submit your answer at any time</li>
+            </ol>
+          </div>
 
           <!-- outlines -->
-          <div class="d-flex flex-wrap gap-3 mb-4" id="outlineWrap">
-            {% for o in data.outlines %}
-              <img src="{{ url_for('static', filename=o.file) }}"
-                   class="match-img shadow-sm"
-                   data-country="{{ o.id }}"
-                   {% if feedback %}style="pointer-events: none;"{% endif %}
-                   alt="{{ o.id|replace('_',' ')|title }}">
-            {% endfor %}
+          <div class="mb-4">
+            <h5 class="mb-3">Country Outlines:</h5>
+            <div class="d-flex flex-wrap gap-3" id="outlineWrap">
+              {% for o in data.outlines %}
+                <img src="{{ url_for('static', filename=o.file) }}"
+                     class="match-img shadow-sm"
+                     data-country="{{ o.id }}"
+                     {% if feedback %}style="pointer-events: none;"{% endif %}
+                     alt="{{ o.id|replace('_',' ')|title }}">
+              {% endfor %}
+            </div>
           </div>
 
           <!-- shuffled names -->
-          <div class="d-flex flex-wrap gap-2" id="nameWrap">
-            {% set shuffled = data.outlines|shuffle %}
-            {% for n in shuffled %}
-              <span class="badge bg-primary name-pill"
-                    data-country="{{ n.id }}"
-                    {% if feedback %}style="pointer-events: none;"{% endif %}>
-                {{ n.id|replace('_',' ')|title }}
-              </span>
-            {% endfor %}
+          <div>
+            <h5 class="mb-3">Country Names:</h5>
+            <div class="d-flex flex-wrap gap-2" id="nameWrap">
+              {% set shuffled = data.outlines|shuffle %}
+              {% for n in shuffled %}
+                <span class="badge bg-primary name-pill"
+                      data-country="{{ n.id }}"
+                      {% if feedback %}style="pointer-events: none;"{% endif %}>
+                  {{ n.id|replace('_',' ')|title }}
+                </span>
+              {% endfor %}
+            </div>
           </div>
         </form>
       {% endif %}
@@ -143,38 +160,68 @@
   const outlines = document.querySelectorAll(".match-img");
   const namePills = document.querySelectorAll(".name-pill");
   const submitBtn = document.getElementById("submitMatch");
-  const hiddenFlag= document.getElementById("matchDone");
+  const hiddenFlag = document.getElementById("matchDone");
 
   let selectedOutline = null, matched = 0;
 
-  outlines.forEach(img=>{
-    img.addEventListener("click", ()=>{
-      outlines.forEach(i=>i.classList.remove("selected"));
+  // Add visual feedback for selection
+  function updateSelection() {
+    outlines.forEach(img => {
+      if (img === selectedOutline) {
+        img.classList.add("selected");
+      } else {
+        img.classList.remove("selected");
+      }
+    });
+  }
+
+  outlines.forEach(img => {
+    img.addEventListener("click", () => {
+      if (img.classList.contains("correct")) return; // Don't allow selecting already matched outlines
+      outlines.forEach(i => i.classList.remove("selected"));
       selectedOutline = img;
-      img.classList.add("selected");
+      updateSelection();
     });
   });
 
-  namePills.forEach(pill=>{
-    pill.addEventListener("click", ()=>{
+  namePills.forEach(pill => {
+    pill.addEventListener("click", () => {
       if (!selectedOutline || pill.classList.contains("disabled")) return;
       const ok = pill.dataset.country === selectedOutline.dataset.country;
-      if (ok){
+      
+      if (ok) {
         selectedOutline.classList.add("correct");
-        pill.classList.replace("bg-primary","bg-success");
+        pill.classList.replace("bg-primary", "bg-success");
         pill.classList.add("disabled");
         matched++;
-        if (matched === outlines.length){
+        
+        // Add a hidden input for this match
+        const matchInput = document.createElement('input');
+        matchInput.type = 'hidden';
+        matchInput.name = 'match_' + selectedOutline.dataset.country;
+        matchInput.value = pill.dataset.country;
+        document.getElementById('matchForm').appendChild(matchInput);
+        
+        // Set match_done only when all matches are correct
+        if (matched === outlines.length) {
           hiddenFlag.value = "done";
-          submitBtn.disabled = false;          // enable manual submit
         }
       } else {
         selectedOutline.classList.add("wrong");
-        setTimeout(()=>selectedOutline.classList.remove("wrong"),600);
+        setTimeout(() => selectedOutline.classList.remove("wrong"), 600);
       }
+      
       selectedOutline.classList.remove("selected");
       selectedOutline = null;
+      updateSelection();
     });
+  });
+
+  // Reset match_done when submitting
+  submitBtn.addEventListener("click", () => {
+    if (matched !== outlines.length) {
+      hiddenFlag.value = "incomplete";
+    }
   });
 </script>
 {% endif %}

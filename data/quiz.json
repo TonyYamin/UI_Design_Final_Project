@@ -9,62 +9,6 @@
   },
   {
     "id": 2,
-    "type": "mc",
-    "prompt": "This country reaches the far southern tip of the continent.",
-    "image": "images/argentina_outline.png",
-    "choices": ["Uruguay", "Panama", "Argentina", "Paraguay"],
-    "answer": "Argentina"
-  },
-  {
-    "id": 3,
-    "type": "mc",
-    "prompt": "Identify the country assembled from these fragments.",
-    "image": "images/colombia.png",
-    "choices": ["Venezuela", "Colombia", "Guatemala", "Suriname"],
-    "answer": "Colombia"
-  },
-  {
-    "id": 4,
-    "type": "mc",
-    "prompt": "This country is split in half by a canal where boats can cross from the Pacific to the Atlantic Ocean.",
-    "image": "images/panama_outline.png",
-    "choices": ["Nicaragua", "Panama", "Costa Rica", "Honduras"],
-    "answer": "Panama"
-  },
-  {
-    "id": 5,
-    "type": "mc",
-    "prompt": "Which country is the long, thin ribbon along the Pacific coast?",
-    "image": "images/chile.png",
-    "choices": ["Chile", "El Salvador", "Guyana", "Paraguay"],
-    "answer": "Chile"
-  },
-  {
-    "id": 6,
-    "type": "mc",
-    "prompt": "The smallest country in Central America, bordered by Guatemala and Honduras.",
-    "image": "images/el_salvador_outline.png",
-    "choices": ["Belize", "El Salvador", "Nicaragua", "Costa Rica"],
-    "answer": "El Salvador"
-  },
-  {
-    "id": 7,
-    "type": "mc",
-    "prompt": "Which oil‑rich country is located on the northern coast of South America?",
-    "image": "images/venezuela.png",
-    "choices": ["Venezuela", "Honduras", "Suriname", "Ecuador"],
-    "answer": "Venezuela"
-  },
-  {
-    "id": 8,
-    "type": "mc",
-    "prompt": "This Central American nation is famous for eco‑tourism and has abolished its military.",
-    "image": "images/costa_rica_outline.png",
-    "choices": ["Uruguay", "Costa Rica", "Belize", "Guatemala"],
-    "answer": "Costa Rica"
-  },
-  {
-    "id": 9,
     "type": "match",
     "region": "central",
     "prompt": "Match every Central‑American outline with its country name.",
@@ -74,6 +18,63 @@
       {"id": "panama",       "file": "images/panama_outline.png"}
     ]
   },
+  {
+    "id": 3,
+    "type": "mc",
+    "prompt": "This country reaches the far southern tip of the continent.",
+    "image": "images/argentina_outline.png",
+    "choices": ["Uruguay", "Panama", "Argentina", "Paraguay"],
+    "answer": "Argentina"
+  },
+  {
+    "id": 4,
+    "type": "mc",
+    "prompt": "Identify the country assembled from these fragments.",
+    "image": "images/colombia_outline.png",
+    "choices": ["Venezuela", "Colombia", "Guatemala", "Suriname"],
+    "answer": "Colombia"
+  },
+  {
+    "id": 5,
+    "type": "mc",
+    "prompt": "This country is split in half by a canal where boats can cross from the Pacific to the Atlantic Ocean.",
+    "image": "images/panama_outline.png",
+    "choices": ["Nicaragua", "Panama", "Costa Rica", "Honduras"],
+    "answer": "Panama"
+  },
+  {
+    "id": 6,
+    "type": "mc",
+    "prompt": "Which country is the long, thin ribbon along the Pacific coast?",
+    "image": "images/chile_outline.png",
+    "choices": ["Chile", "El Salvador", "Guyana", "Paraguay"],
+    "answer": "Chile"
+  },
+  {
+    "id": 7,
+    "type": "mc",
+    "prompt": "The smallest country in Central America, bordered by Guatemala and Honduras.",
+    "image": "images/el_salvador_outline.png",
+    "choices": ["Belize", "El Salvador", "Nicaragua", "Costa Rica"],
+    "answer": "El Salvador"
+  },
+  {
+    "id": 8,
+    "type": "mc",
+    "prompt": "Which oil‑rich country is located on the northern coast of South America?",
+    "image": "images/venezuela_outline.png",
+    "choices": ["Venezuela", "Honduras", "Suriname", "Ecuador"],
+    "answer": "Venezuela"
+  },
+  {
+    "id": 9,
+    "type": "mc",
+    "prompt": "This Central American nation is famous for eco‑tourism and has abolished its military.",
+    "image": "images/costa_rica_outline.png",
+    "choices": ["Uruguay", "Costa Rica", "Belize", "Guatemala"],
+    "answer": "Costa Rica"
+  },
+  
   {
     "id": 10,
     "type": "match",
